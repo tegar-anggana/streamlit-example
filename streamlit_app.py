@@ -1,9 +1,10 @@
+from keras.models import load_model
 from collections import namedtuple
 import altair as alt
 import math
 import pandas as pd
 import streamlit as st
-import pickle
+# import pickle
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
@@ -14,7 +15,8 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 input_review = st.text_area(label="Masukkan review (dalam bahasa Inggris):",
                             placeholder="Contoh: I like this course...")
 
-model = pickle.load(open("Pickle_RL_Model.pkl", 'rb'))
+# model = pickle.load(open("Pickle_RL_Model.pkl", 'rb'))
+model = load_model('my_h5_model.h5')
 
 # blahblah 1
 df = pd.read_csv("./data_review_waterloo.csv")
