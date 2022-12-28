@@ -3,6 +3,9 @@ import altair as alt
 import math
 import pandas as pd
 import streamlit as st
+import pickle
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 """
 # Welcome to Streamlit!
@@ -17,24 +20,25 @@ forums](https://discuss.streamlit.io).
 In the meantime, below is an example of what you can do with just a few lines of code:
 """
 
+review = st.text_area(label="Masukkan review (dalam bahasa Inggris):",
+                      placeholder="Contoh: I like this course...")
 
-with st.echo(code_location='below'):
-    total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
-    num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
+model = pickle.load(open("Pickle_RL_Model.pkl", 'rb'))
 
-    Point = namedtuple('Point', 'x y')
-    data = []
+# blahblah 1
+df = pd.read_csv("./data_review_waterloo.csv")
+df.reviews = df.reviews.astype(str)
+review_df = df[['reviews', 'course_rating']]
+review = review_df.reviews.values
+tokenizer = Tokenizer(num_words=5000)
+tokenizer.fit_on_texts(review)
+sentiment_label = review_df.course_rating.factorize()
 
-    points_per_turn = total_points / num_turns
+# blahblah 2
 
-    for curr_point_num in range(total_points):
-        curr_turn, i = divmod(curr_point_num, points_per_turn)
-        angle = (curr_turn + 1) * 2 * math.pi * i / points_per_turn
-        radius = curr_point_num / total_points
-        x = radius * math.cos(angle)
-        y = radius * math.sin(angle)
-        data.append(Point(x, y))
 
-    st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
-        .mark_circle(color='#0068c9', opacity=0.5)
-        .encode(x='x:Q', y='y:Q'))
+def predict_sentiment(text):
+    tw = tokenizer.texts_to_sequences([text])
+    tw = pad_sequences(tw, maxlen=200)
+    prediction = int(model.predict(tw).round().item())
+    return sentiment_label[1][prediction]
