@@ -14,11 +14,11 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 input_review = st.text_area(label="Masukkan review (dalam bahasa Inggris):",
                             placeholder="Contoh: I like this course...")
+analisis_button = st.button(label="Analisis")
 
-# model = pickle.load(open("Pickle_RL_Model.pkl", 'rb'))
+st.write(analisis_button)
+
 model = load_model('my_h5_model.h5')
-
-# blahblah 1
 df = pd.read_csv("./data_review_waterloo.csv")
 df.reviews = df.reviews.astype(str)
 review_df = df[['reviews', 'course_rating']]
