@@ -35,4 +35,8 @@ analisis_button = st.button(label="Analisis")
 
 if analisis_button:
     hasil_analisis = predict_sentiment(input_review)
-    st.write(hasil_analisis)
+    if hasil_analisis == "liked course":
+        sentimen = "Suka"
+    else:
+        sentimen = "Tidak Suka"
+    st.write("Hasil Analisis : " + sentimen)
