@@ -12,14 +12,6 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 # Analisis Sentimen terhadap Review Mahasiswa
 """
 
-input_review = st.text_area(label="Masukkan review (dalam bahasa Inggris):",
-                            placeholder="Contoh: I like this course...")
-analisis_button = st.button(label="Analisis")
-
-if analisis_button:
-    hasil_analisis = predict_sentiment(input_review)
-    st.write(hasil_analisis)
-
 model = load_model('my_h5_model.h5')
 df = pd.read_csv("./data_review_waterloo.csv")
 df.reviews = df.reviews.astype(str)
@@ -35,3 +27,12 @@ def predict_sentiment(text):
     tw = pad_sequences(tw, maxlen=200)
     prediction = int(model.predict(tw).round().item())
     return sentiment_label[1][prediction]
+
+
+input_review = st.text_area(label="Masukkan review (dalam bahasa Inggris):",
+                            placeholder="Contoh: I like this course...")
+analisis_button = st.button(label="Analisis")
+
+if analisis_button:
+    hasil_analisis = predict_sentiment(input_review)
+    st.write(hasil_analisis)
