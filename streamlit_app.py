@@ -16,7 +16,9 @@ input_review = st.text_area(label="Masukkan review (dalam bahasa Inggris):",
                             placeholder="Contoh: I like this course...")
 analisis_button = st.button(label="Analisis")
 
-st.write(analisis_button)
+if analisis_button:
+    hasil_analisis = predict_sentiment(input_review)
+    st.write(hasil_analisis)
 
 model = load_model('my_h5_model.h5')
 df = pd.read_csv("./data_review_waterloo.csv")
